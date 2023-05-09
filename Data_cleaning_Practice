@@ -31,3 +31,35 @@ flipper_length_adelie_only <- clean_penguins %>%
   #first it uses the filter and filters out just the adelie species
   #next it selects the columents species, and flipper length
   #last it aranges the columns by flipper length in asc order.
+
+toolbox_function <- function(data, variable_name, species, exclude_cols = NULL, arrange_order = "ascending", plot_cols = NULL) {
+  
+  # Filter by species
+  filtered_data <- data %>% filter(Species == species)
+  
+  # Exclude columns
+  if (!is.null(exclude_cols)) {
+    filtered_data <- filtered_data %>% select(-exclude_cols)
+  }
+  
+  # Arrange data
+  if (arrange_order == "ascending") {
+    filtered_data <- filtered_data %>% arrange(across(.cols = everything()))
+  } else if (arrange_order == "descending") {
+    filtered_data <- filtered_data %>% arrange(across(.cols = everything(), .desc = TRUE))
+  } else {
+    stop("Invalid arrange order. Please enter 'ascending' or 'descending'.")
+  }
+  
+  # Create new variable
+  new_var <- filtered_data %>% pull(plot_cols[1]) - filtered_data %>% pull(plot_cols[2])
+  names(new_var) <- variable_name
+  
+  # Plot data
+  if (!is.null(plot_cols)) {
+    ggplot(filtered_data, aes(x = .data[[plot_cols[1]]], y = .data[[plot_cols[2]]])) +
+      geom_point()
+  }
+  
+  return(new_var)
+}

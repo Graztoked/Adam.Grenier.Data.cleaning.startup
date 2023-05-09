@@ -1,0 +1,33 @@
+library(tidyverse)
+library(purrr)
+library(tidyr)
+library(janitor)
+  #loading library that you will use daily.
+
+penguins <- penguins
+penguins_raw <- penguins_raw
+  #loading the penguin data set to use
+
+clean_penguins <- na.omit(penguins_raw)
+  #cleanup the raw penguin data
+
+clean_penguins %>% select(-"Region",-"Stage")
+  #Using the select() command selects what column you want, Using "-" will remove the column selected.
+
+flipper_length <- clean_penguins %>% 
+      arrange(`Flipper Length (mm)`)
+  #sorts the Flipper Length column
+
+flipper_length_desc <- clean_penguins %>% 
+      arrange(desc(`Flipper Length (mm)`))
+  #sorts the flipper length column by descending order
+
+
+flipper_length_adelie_only <- clean_penguins %>% 
+  filter(Species == "Adelie Penguin (Pygoscelis adeliae)") %>% 
+  select(Species, `Flipper Length (mm)`) %>% 
+  arrange(`Flipper Length (mm)`)
+  #this command filters out just the adelie species and flipper length and aranges in asc order.
+  #first it uses the filter and filters out just the adelie species
+  #next it selects the columents species, and flipper length
+  #last it aranges the columns by flipper length in asc order.
